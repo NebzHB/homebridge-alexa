@@ -27,6 +27,7 @@ Enable Amazon Alexa access to you homebridge controlled devices and accessories.
 * Support for the color temperature of white bulbs
 * Support for Speakers ( Tested with homebridge-yamaha-home and homebridge-http-irblaster )
 * Support for Apple TV ( Supports homebridge-apple-tv )
+* Support Spotify playback controls via homebridge-yamaha-home
 
 Alexa device names are the same as the homebridge device names.
 
@@ -68,18 +69,6 @@ Emulating a Light bulb
 * Alexa, set/make the *device* warmer/softer ( Color temperature )
 * Alexa, make the *device* warm white ( Color temperature )
 
-## AppleTV
-
-* Alexa, pause *device* ( Apple TV )
-* Alexa, resume *device* ( Apple TV )
-* Alexa, play *device* ( Apple TV )
-* Alexa, stop *device* ( Apple TV )
-
-## Speakers
-
-* Alexa, volume up 20 on *device* ( Speakers )
-* Alexa, set the volume of *device* to 50 ( Speakers )
-
 ### Color Temperatures ###
 
 ```
@@ -89,6 +78,27 @@ white
 daylight, daylight white
 cool, cool white
 ```
+
+## AppleTV
+
+* Alexa, pause *device* ( Apple TV )
+* Alexa, resume *device* ( Apple TV )
+* Alexa, play *device* ( Apple TV )
+* Alexa, stop *device* ( Apple TV )
+
+## Speakers
+
+* Alexa, lower the volume on *device*
+* Alexa, volume up 20 on *device* ( Speakers )
+* Alexa, set the volume of *device* to 50 ( Speakers )
+
+## Yamaha Receiver/Spotify control
+
+* Alexa, pause Stereo
+* Alexa, resume Stereo
+* Alexa, stop Stereo
+* Alexa, next song on Stereo
+* Alexa, rewind on Stereo
 
 # Installation of homebridge-alexa
 
@@ -162,14 +172,16 @@ sudo npm install -g homebridge-alexa
     "name": "Alexa",
     "username": "....",
     "password": "....",
-    "speakers": {
-        "Manufacturer": "Name"
-    }
+    "speakers": [{
+        "manufacturer": "...",
+        "name": "..."
+    }]
   }
 ],
 ```
 
 ** Manufacturer - Is the manufacturer of the accessory as shown in the Home App
+
 ** Name - Is the name of the accessory as shown in the Home App
 
 ie
@@ -179,11 +191,45 @@ ie
     "username": "...",
     "password": "...",
     "name": "Alexa",
-    "speakers": {
-      "HTTP-IRBlaster": "KODI"
+    "speakers": [{
+        "manufacturer": "Yamaha",
+        "name": "Front"
+      },
+      {
+        "manufacturer": "Yamaha",
+        "name": "Rear"
+      },
+      {
+        "manufacturer": "HTTP-IRBlaster",
+        "name": "Panasonic"
       }
+    ]
   }
 ```
+
+* Apple TV
+
+This is the config from my Apple TV after completing the pairing.  Please note, *"showDefaultSwitches": true* and   *"defaultSwitchesIncludeATVName": true*, are required parameters.  Please note I blanked out the devices/credentials section with my ATV credentials.
+
+```
+{
+  "platform":"AppleTV",
+  "name":"Apple TV",
+  "devices": [{
+          "id": "Cottage",
+          "name": "TV",
+          "credentials": "...." }
+    ],
+  "showDefaultSwitches": true,
+  "defaultSwitchesIncludeATVName": true,
+  "showPairSwitches": false,
+  "hideWelcomeMessage": true
+}
+```
+
+* Yamaha Spotify Controls
+
+This uses the plugin homebridge-yamaha-home and a Yamaha Receiver which includes Spotify and Spotify Playback Controls.
 
 **Testing and confirming configuration**
 
