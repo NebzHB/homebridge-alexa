@@ -9,7 +9,7 @@
 
 var Accessory, Service, Characteristic, UUIDGen;
 var http = require('http');
-var debug = require('debug')('AlexaPlugin');
+var debug = require('debug')('alexaPlugin');
 
 var alexaLocal = require('./lib/alexaLocal.js').alexaLocal;
 var alexaHAP = require('./lib/alexaHAP.js');
@@ -35,8 +35,8 @@ function alexahome(log, config, api) {
   this.username = config['username'] || false;
   this.password = config['password'] || false;
   this.filter = config['filter'];
-  this.refresh = config['refresh'] || 60 * 15; // Update every 15 minute's
-  this.speakers = config['speakers'] || {};    // Array of speaker devices
+  this.refresh = config['refresh'] || 60 * 15; // Value in seconds, default every 15 minute's
+  this.speakers = config['speakers'] || {}; // Array of speaker devices
 
   if (!this.username || !this.password)
     this.log.error("Missing username and password");
@@ -91,6 +91,7 @@ alexahome.prototype.didFinishLaunching = function() {
   alexa.on('Alexa.ColorTemperatureController', _alexaColorTemperatureController.bind(this));
   alexa.on('Alexa.PlaybackController', _alexaPlaybackController.bind(this));
   alexa.on('Alexa.Speaker', _alexaSpeaker.bind(this));
+  alexa.on('Alexa.ThermostatController', _alexaThermostatController.bind(this));
   //alexa.on('Alexa.StepSpeaker', _alexaStepSpeaker.bind(this));
 }
 
@@ -137,7 +138,7 @@ function _alexaColorTemperatureController(message, callback) {
         this.log("ColorTemperatureController-get", action, haAction.host, haAction.port, status, err);
 
         var colorTemperatureDelta = 40;
-        if ( action.toLowerCase() == "decreasecolortemperature" )
+        if (action.toLowerCase() == "decreasecolortemperature")
           colorTemperatureDelta = -40;
         colorTemperature = status.characteristics[0].value + colorTemperatureDelta > 500 ? 500 : status.characteristics[0].value + colorTemperatureDelta;
         colorTemperature = colorTemperature < 140 ? 140 : colorTemperature;
@@ -150,14 +151,14 @@ function _alexaColorTemperatureController(message, callback) {
         };
         alexaHAP.HAPcontrol(haAction.host, haAction.port, JSON.stringify(body), function(err, status) {
           this.log("ColorTemperatureController-change", action, haAction.host, haAction.port, status, body, err);
-          var response = alexaTranslator.alexaResponse(message, status, err, _round(1000000/colorTemperature));
+          var response = alexaTranslator.alexaResponse(message, status, err, _round(1000000 / colorTemperature));
           callback(err, response);
         }.bind(this));
       }.bind(this));
       break;
     case "setcolortemperature":
       // No need to do anything
-      colorTemperature = _round(1000000/message.directive.payload.colorTemperatureInKelvin);
+      colorTemperature = _round(1000000 / message.directive.payload.colorTemperatureInKelvin);
       var body = {
         "characteristics": [{
           "aid": haAction.aid,
@@ -222,6 +223,30 @@ function _alexaPowerController(message, callback) {
   }.bind(this));
 }
 
+function _alexaThermostatController(message, callback) {
+  var action = message.directive.header.name;
+  var endpointId = message.directive.endpoint.endpointId;
+  try {
+    var haAction = JSON.parse(message.directive.endpoint.cookie[action]);
+  } catch (e) {
+    this.log.error("_alexaThermostatController missing action", action, e.message, message.directive.endpoint.cookie);
+    callback(e);
+    return;
+  }
+  var body = {
+    "characteristics": [{
+      "aid": haAction.aid,
+      "iid": haAction.iid,
+      "value": message.directive.payload.targetSetpoint.value
+    }]
+  };
+  alexaHAP.HAPcontrol(haAction.host, haAction.port, JSON.stringify(body), function(err, status) {
+    this.log("ThermostatController", action, haAction.host, haAction.port, status, err);
+    var response = alexaTranslator.alexaResponse(message, status, err);
+    callback(err, response);
+  }.bind(this));
+}
+
 function _alexaColorController(message, callback) {
   var action = message.directive.header.name;
   var endpointId = message.directive.endpoint.endpointId;
@@ -235,6 +260,10 @@ function _alexaColorController(message, callback) {
   debug("action", haAction, message.directive.payload);
   var body = {
     "characteristics": [{
+      "aid": haAction.on.aid,
+      "iid": haAction.on.iid,
+      "value": 1
+    }, {
       "aid": haAction.hue.aid,
       "iid": haAction.hue.iid,
       "value": message.directive.payload.color.hue
@@ -257,7 +286,7 @@ function _alexaColorController(message, callback) {
 }
 
 function _alexaPowerLevelController(message, callback) {
-  //debug(JSON.stringify(message, null, 4));
+  // debug(JSON.stringify(message, null, 4));
   var action = message.directive.header.name;
   var endpointId = message.directive.endpoint.endpointId;
   var powerLevel, haAction;

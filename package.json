@@ -1,10 +1,11 @@
 {
   "name": "homebridge-alexa",
-  "version": "0.1.49",
+  "version": "0.1.61",
   "description": "Alexa Skill frontend for Homebridge",
   "main": "web.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "document": "./gh-md-toc --insert README.md;./gh-md-toc --insert Troubleshooting.md"
   },
   "repository": {
     "type": "git",
