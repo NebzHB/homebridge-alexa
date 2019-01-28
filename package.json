@@ -1,6 +1,6 @@
 {
   "name": "homebridge-alexa",
-  "version": "0.1.61",
+  "version": "0.1.71",
   "description": "Alexa Skill frontend for Homebridge",
   "main": "web.js",
   "scripts": {
@@ -20,14 +20,16 @@
     "homebridge": ">=0.4.16"
   },
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.18.3",
     "bonjour": "^=3.5.0",
     "debug": "^2.6.9",
     "httpdispatcher": ">=2.0.1",
     "ip": "^=1.1.5",
-    "is-my-json-valid": "^2.17.2",
-    "mqtt": "^2.0.1",
-    "requestretry": "^=1.13.0"
+    "is-my-json-valid": "^2.19.0",
+    "mqtt": "^2.18.8",
+    "npm": "^6.5.0",
+    "requestretry": "^=1.13.0",
+    "update": "^0.7.4"
   },
   "author": "NorthernMan54",
   "license": "Apache-2.0",

@@ -14,6 +14,7 @@ var debug = require('debug')('alexaPlugin');
 var alexaLocal = require('./lib/alexaLocal.js').alexaLocal;
 var alexaHAP = require('./lib/alexaHAP.js');
 var alexaTranslator = require('./lib/alexaTranslator.js');
+const packageConfig = require('./package.json');
 
 var mqtt = require('mqtt');
 var alexa;
@@ -38,6 +39,22 @@ function alexahome(log, config, api) {
   this.refresh = config['refresh'] || 60 * 15; // Value in seconds, default every 15 minute's
   this.speakers = config['speakers'] || {}; // Array of speaker devices
 
+  // Enable config based DEBUG logging enable
+  this.debug = config['debug'] || false;
+  if (this.debug) {
+    let debugEnable = require('debug');
+    let namespaces = debugEnable.disable();
+
+    // this.log("DEBUG-1", namespaces);
+    if (namespaces) {
+      namespaces = namespaces + ',alexa*';
+    } else {
+      namespaces = 'alexa*';
+    }
+    // this.log("DEBUG-2", namespaces);
+    debugEnable.enable(namespaces);
+  }
+
   if (!this.username || !this.password)
     this.log.error("Missing username and password");
 
@@ -45,6 +62,11 @@ function alexahome(log, config, api) {
     this.api = api;
     this.api.on('didFinishLaunching', this.didFinishLaunching.bind(this));
   }
+
+  this.log.info(
+    '%s v%s, node %s, homebridge v%s',
+    packageConfig.name, packageConfig.version, process.version, api.serverVersion
+  );
 }
 
 alexahome.prototype = {
@@ -271,10 +293,6 @@ function _alexaColorController(message, callback) {
       "aid": haAction.saturation.aid,
       "iid": haAction.saturation.iid,
       "value": message.directive.payload.color.saturation * 100
-    }, {
-      "aid": haAction.brightness.aid,
-      "iid": haAction.brightness.iid,
-      "value": message.directive.payload.color.brightness * 100
     }]
   };
   debug("color HB command", body);
