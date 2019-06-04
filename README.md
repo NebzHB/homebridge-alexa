@@ -3,57 +3,55 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/homebridge-alexa.svg?style=flat)](https://npmjs.org/package/homebridge-alexa)
 
 <p align="center">
-    <img src="https://cl.ly/99e68ac49cef/Logo2x.png" height="200">
+    <img src="docs/homebridge.png" height="200">
 </p>
 
 Enable Amazon Alexa access and control your homebridge controlled devices and accessories.  Full support for all Amazon Alexa devices, including the echo 2nd Generation and software based solutions.  Uses an Amazon smart home skill based approach for integration between HomeBridge and Amazon Alexa.
 
-Country availability - The plugin is available in these countries, English (AU), German (DE), English (CA), English (US), French (FR), English (UK).  
+Country availability - The plugin is available in these countries, English (AU), German (DE), English (CA), English (US), French (FR), English (UK), Italian (IT), English (IN), Spanish (ES), Japanese (JP), Spanish(US), Portuguese (BR) and Spanish (MX).  
 
-Currently in beta/certification - Italian (IT), English (IN), Spanish (ES), Japanese (JP), and Spanish (MX).
+# IMPORTANT - For existing users, installing an updated version of the plugin after March 22, 2019 will cause Alexa to mark all your existing devices as Offline and create new ones.  
+You will need to manually remove all existing devices after upgrading and setup groups and routines again.  This would only occur with the first update after this date.  I would strongly recommend making note and recording the devices that are in each of your groups and routines prior to updating so you can recreate them again afterwards.  I made a large change around the device identifiers between homebridge and Alexa, and this should avoid any further duplicate devices.  For reference, I'm using these values to create a unique key for Alexa homebridge name, homebridge username, plugin manufacturer, Service and accessory name.  ( homebridge name and username are from the config.json bridge settings.)  If you never change these values, Alexa should never discover duplicate devices.
 
-**Nov 2 - I have just submitted the skill for certification in Italian (IT), English (IN),  Spanish (ES), Japanese (JP), and Spanish (MX). This should take 5-7 days, fingers crossed.**
-
-**Nov 9 - I just received an email back from Amazon, and they are saying that they have a large number of skills to review, and need a few more days.  Stay tuned.**
-
-**Nov 14 - Received a response from Amazon, and I failed certification due to some text and wording issues.**
-
-**Nov 18 - Resubmitted to Amazon for certification.**
-
-**Nov 29 - No response from Amazon yet.**
-
-**Dec 7 - Certification certification failed for Japan and Mexico, see Issue #150**
-
-**Dec 9 - Resubmitted to Amazon for certification.**
-
-**Dec 20th - Certification certification failed for Japan and Mexico, see Issue #150**
-
-**Dec 27th - Resubmitted to Amazon for certification.**
-
-**Jan 11th - Certification certification failed for Italian and Spanish, see Issue #164**
+# Features
 
 * Supports multiple homebridge instances running on your network.
 * Auto-discovery of multiple Homebridge's
-* Supports devices of homekit Service type Lightbulb, Outlet, Fan, Fan2, Temperature Sensor, Window Coverings and Switch.
+* Supports the following HomeKit accessory types Lightbulb, Outlet, Fan, Fan2, Temperature Sensor, Window Coverings and Switch.
+* Supports passing of sensor updates in real time to Alexa for use in routines.
 * Includes support for brightness and colour.
 * This plugin does not have any devices or accessories that are visible from Homekit, and does not need to be added on the Home app.
-* The plugin does not need to be installed in your 'main' homebridge instance.  It can be installed in any 'Homebridge' instance in your setup
+* The plugin does not need to be installed in your 'main' homebridge instance.  It can be installed in any 'Homebridge' instance in your setup.
 * Enables control from non-hardware based alexa devices like Invoxia Triby, and AlexaPI.
 
 # Table of Contents
 <!--ts-->
+   * [IMPORTANT - For existing users, installing an updated version of the plugin after March 22, 2019 will cause Alexa to mark all your existing devices as Offline and create new ones.](#important---for-existing-users-installing-an-updated-version-of-the-plugin-after-march-22-2019-will-cause-alexa-to-mark-all-your-existing-devices-as-offline-and-create-new-ones)
+   * [Features](#features)
    * [Table of Contents](#table-of-contents)
-   * [New features with Version 2](#new-features-with-version-2)
+   * [Supported devices](#supported-devices)
       * [HomeKit/Homebridge Devices supported](#homekithomebridge-devices-supported)
          * [Native Support](#native-support)
          * [Supported as Other](#supported-as-other)
-      * [Voice commands supported](#voice-commands-supported)
+      * [Unsupported device types](#unsupported-device-types)
+   * [Alexa Voice Commands](#alexa-voice-commands)
+      * [Setup](#setup)
+      * [Light bulbs / Switches / Dimmer Switches](#light-bulbs--switches--dimmer-switches)
+      * [Color lights](#color-lights)
       * [Color temperature](#color-temperature)
          * [Color Temperatures](#color-temperatures)
+      * [Garage door](#garage-door)
+      * [Window coverings / blinds](#window-coverings--blinds)
+      * [Thermostat's and Heater / Cooler's](#thermostats-and-heater--coolers)
+      * [Lock / Unlock Doors](#lock--unlock-doors)
+      * [Temperature sensors](#temperature-sensors)
       * [AppleTV](#appletv)
+      * [HomeKit TV (iOS 12.2)](#homekit-tv-ios-122)
+         * [HomeKit TV - Tested plugins](#homekit-tv---tested-plugins)
       * [Speakers](#speakers)
+         * [Bose SoundLink - Change preset](#bose-soundlink---change-preset)
       * [Yamaha Receiver/Spotify control](#yamaha-receiverspotify-control)
-      * [Unsupported device types](#unsupported-device-types)
+      * [Contact and Motion Sensors](#contact-and-motion-sensors)
    * [Installation of homebridge-alexa](#installation-of-homebridge-alexa)
       * [Prepare Homebridge for plugin installation](#prepare-homebridge-for-plugin-installation)
       * [Install Plugin](#install-plugin)
@@ -64,8 +62,13 @@ Currently in beta/certification - Italian (IT), English (IN), Spanish (ES), Japa
       * [Initial Testing and confirming configuration](#initial-testing-and-confirming-configuration)
       * [Enable Homebridge smarthome skill and link accounts](#enable-homebridge-smarthome-skill-and-link-accounts)
       * [Discover Devices](#discover-devices)
-   * [Issues, Questions or Problems](#issues-questions-or-problems)
-      * [Known Issues](#known-issues)
+   * [Service Availability and Issues](#service-availability-and-issues)
+      * [Homebridge cloud service monitoring ( homebridge.ca )](#homebridge-cloud-service-monitoring--homebridgeca-)
+      * [Raising Issues and Troubleshooting](#raising-issues-and-troubleshooting)
+         * [Known Issues](#known-issues)
+         * [Slack Channel](#slack-channel)
+         * [Debug logs](#debug-logs)
+         * [Homebridge Accessory Dump](#homebridge-accessory-dump)
    * [Previous version of homebridge-alexa ( Version 1 )](#previous-version-of-homebridge-alexa--version-1-)
       * [Upgrading from the previous, non skill based version of homebridge-alexa](#upgrading-from-the-previous-non-skill-based-version-of-homebridge-alexa)
    * [Roadmap](#roadmap)
@@ -75,20 +78,22 @@ Currently in beta/certification - Italian (IT), English (IN), Spanish (ES), Japa
 
 <!--te-->
 
-# New features with Version 2
+# Supported devices
 
-* Support for color bulbs
-* Support for Window coverings/blinds ( As Alexa doesn't support window coverings I'm using a light bulb)
-* Support for Garage Doors ( As Alexa doesn't support Garage Doors I'm using a light bulb)
-* Support for Temperature Sensors
+* Support for Light Bulbs, Switches and outlets
+* Support for Color Light Bulbs and Colour Temperature of white Light bulbs
+* Support for Fans (As Alexa doesn't support Fans coverings I'm using Other)
+* Support for Window coverings/blinds (As Alexa doesn't support window coverings I'm using Other)
+* Support for Garage Doors
+* Support for Temperature, Contact and Motion Sensors.  Also supports sending real time updates from Contact and Motion sensors to Alexa, for use in routines.
 * Support for Fan2 aka Dyson fans
-* Support for Valves, Sprinklers and Shower Heads
+* Support for Valves, Sprinklers and Shower Heads (As Alexa doesn't support these, they are Other)
 * Support for more than 100 accessories
 * Support for generation 2 Echo's and other Alexa devices not supported with the original version
-* Support for the color temperature of white bulbs
-* Support for Speakers ( Tested with homebridge-yamaha-home and homebridge-http-irblaster )
+* Support for Speakers ( Tested with homebridge-yamaha-home, homebridge-soundtouch and homebridge-http-irblaster )
 * Support for Apple TV ( Supports homebridge-apple-tv )
-* Support Spotify playback controls via homebridge-yamaha-home
+* Support Spotify playback controls on Yamaha Receivers via homebridge-yamaha-home
+* Support for door locks
 
 Alexa device names are the same as the homebridge device names.
 
@@ -104,27 +109,44 @@ This only supports accessories connected via a homebridge plugin, any 'Homekit' 
 * Speakers
 * Apple TV
 * Temperature Sensors
-* Door/Garage Door - Supported as a on/off device
-* Thermostat - Partial support only ( Set target Temperature in celsius )
+* Motion Sensors
+* Contact Sensors
+* Thermostat
+* Heater/Cooler
+* Door locks ( Lock and status only, Alexa does not support unlocking )
+* HomeKit Television ( Initial support only On/Off and Volume Control )
 
 ### Supported as Other
 
+* Door/Garage Door - Supported as a on/off device and also supported as a contact sensor for routines
 * Fans - Supported as Other
 * Window Coverings / Blinds - Supported as Other
 * Valves, Sprinklers and Shower Heads - Supported as a light bulb
 
-## Voice commands supported
+## Unsupported device types
+
+* Camera's ( for use with an Alexa show etc )
+* Eve devices
+* Security Systems
+
+# Alexa Voice Commands
+
+## Setup
 
 * Alexa, discover devices
-* Alexa, turn on  *device*
-* Alexa, turn off  *device*
+
+## Light bulbs / Switches / Dimmer Switches
+
+* Alexa, turn on *device*
+* Alexa, turn off *device*
+
 * Alexa, set *device* to 50
-* Alexa, what is the temperature in the *device* ( Not supported in Japan )
 * Alexa, dim *device*
 * Alexa, brighten *device*
-* Alexa, turn *device* red
-* Alexa, turn on *device* ( Open's a garage door )
-* Alexa, turn off *device* ( Close's a garage door )
+
+## Color lights
+
+* Alexa, turn *device* red/green/blue
 
 ## Color temperature
 
@@ -142,6 +164,31 @@ daylight, daylight white
 cool, cool white
 ```
 
+## Garage door
+
+* Alexa, turn on *device* ( Open's a garage door )
+* Alexa, turn off *device* ( Close's a garage door )
+
+## Window coverings / blinds
+
+* Alexa, turn on *device* ( Open's blinds )
+* Alexa, turn off *device* ( Close's blinds )
+* Alexa, set *device* to 50 ( Moves blinds to 50% )
+
+## Thermostat's and Heater / Cooler's
+
+* Alexa, set thermostat to 20
+* Alexa, set thermostat to heat/cool/automatic/off
+
+## Lock / Unlock Doors
+
+* Alexa, unlock my *device* ( Amazon is blocking this function )
+* Alexa, lock my *device*
+
+## Temperature sensors
+
+* Alexa, what is the temperature in the *device* ( Not supported in Japan )
+
 ## AppleTV
 
 * Alexa, pause *device* ( Apple TV )
@@ -149,11 +196,56 @@ cool, cool white
 * Alexa, play *device* ( Apple TV )
 * Alexa, stop *device* ( Apple TV )
 
+## HomeKit TV (iOS 12.2)
+
+* Alexa, turn on *device*
+* Alexa, turn off *device*
+
+* Alexa, raise the volume on *device*
+* Alexa, lower the volume on *device*
+* Alexa, volume up 20 on *device*
+* Alexa, set the volume of *device* to 50
+
+Or
+
+* Alexa, raise the volume on *device*
+* Alexa, lower the volume on *device*
+
+These are the remote buttons
+
+* Alexa, pause *device* ( pause/play )
+* Alexa, resume *device* ( pause/play )
+* Alexa, play *device* ( select )
+* Alexa, stop *device* ( back )
+* Alexa, next on *device* ( right arrow )
+* Alexa, rewind on *device* ( left arrow )
+
+### HomeKit TV - Tested plugins
+
+* Panasonic TV: - homebridge-panasonic-viera-tv@4.1.0
+  - Alexa can turn on and off and control volume
+
+* Sony Bravia TV (Android TV) - homebridge-bravia@1.1.0
+  - Alexa can turn on and off and control volume
+
+* Sky Q decoder - homebridge-sky-q-experimental@1.0.2
+  - Alexa can turn on and off
+
+* Samsung Tizen - homebridge-samsung-tizen
+  - Alexa can turn on and off and control volume
+
+* Yamaha AVR - homebridge-yamaha-zone-tv
+  - Alexa can turn on and off and control volume. Also control Spotify/Airplay playback
+
 ## Speakers
 
 * Alexa, lower the volume on *device*
 * Alexa, volume up 20 on *device* ( Speakers )
 * Alexa, set the volume of *device* to 50 ( Speakers )
+
+### Bose SoundLink - Change preset
+
+* Alexa, change channel to 1-6 on *device*
 
 ## Yamaha Receiver/Spotify control
 
@@ -163,14 +255,13 @@ cool, cool white
 * Alexa, next song on Stereo
 * Alexa, rewind on Stereo
 
-## Unsupported device types
+## Contact and Motion Sensors
 
-* Camera's ( for use with an Alexa show etc )
-* Eve devices
-* Locks
-* Security Systems
+* These are only visible to routines, no voice commands are available
 
 # Installation of homebridge-alexa
+
+* If you are looking for a basic setup to get this plugin up and running check out this guide (https://sambrooks.net/controlling-homebridge-using-alexa/).
 
 ## Prepare Homebridge for plugin installation
 
@@ -192,6 +283,19 @@ HOMEBRIDGE_OPTS=-I
 # If you uncomment the following line, homebridge will log more
 # You can display this via systemd's journalctl: journalctl -f -u homebridge
 #DEBUG=
+```
+
+* If your using pm2 to manage the startup of homebridge, you can add the -I option with these steps
+
+```
+pm2 delete homebridge
+pm2 start homebridge -- -I
+pm2 save
+```
+To review your settings, to ensure that they are working correctly.
+
+```
+pm2 show homebridge
 ```
 
 * If you have multiple homebridge options, the -I should be listed first. ie
@@ -266,6 +370,22 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
+* routines - Enables passing to Alexa events from Motion and Contact sensors. For use in the Alexa app to create Routines triggered by these sensors.
+
+**For users who enrolled prior to March 22, 2019, you MUST Disable the skill and Enable the skill in the Alexa app as part of setup. If you miss this step, you will see this error `Event Gateway Response Code: 400` in the logs.**
+
+```
+"platforms": [
+  {
+    "platform": "Alexa",
+    "name": "Alexa",
+    "username": "....",
+    "password": "....",
+    "routines": true
+  }
+],
+```
+
 * debug - This enables debug logging mode, can be used instead of the command line option ( DEBUG=* homebridge )
 
 ```
@@ -308,7 +428,30 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-* speakers - Devices to configure as speakers
+* combine - Combine disparate accessories into one common device.  My example here is combining my TV Remote (KODI), which only has ON/OFF and Volume controls into the Apple TV (TV) playback controls. And combining the spotify controls from my Yamaha receiver into the Zone.
+
+```
+"platforms": [
+  {
+    "platform": "Alexa",
+    "name": "Alexa",
+    "username": "....",
+    "password": "....",
+    "combine": [{
+          "into": "TV",
+          "from": ["KODI"]
+        }, {
+          "into": "Front",
+          "from": ["Yamaha"]
+        }, {
+          "into": "Rear",
+          "from": ["Yamaha"]
+        }],
+  }
+],
+```
+
+* speakers - Devices to configure as speakers as HomeKit currently does not have a Speaker service
 
 ```
 "platforms": [
@@ -326,7 +469,6 @@ sudo npm install -g homebridge-alexa
 ```
 
 ** Manufacturer - Is the manufacturer of the accessory as shown in the Home App
-
 ** Name - Is the name of the accessory as shown in the Home App
 
 ie
@@ -375,6 +517,14 @@ This is the config from my Apple TV after completing the pairing.  Please note, 
 * Yamaha Spotify Controls
 
 This uses the plugin homebridge-yamaha-home and a Yamaha Receiver which includes Spotify and Spotify Playback Controls.
+
+* New Parser
+
+As of April 14, 2019 I changed the Homebridge device parser massively, to add support for Locks and Heater/Cooler devices.  To go back to the old device parser, you can set an option oldParser to true.  Default is to the new parser.
+
+```
+"oldParser": true
+```
 
 ## Initial Testing and confirming configuration
 
@@ -441,24 +591,42 @@ Please note, as part of the verbose output from discovery devices, all your devi
 
 9. Installation is now complete, good luck and enjoy.
 
-# Issues, Questions or Problems
+# Service Availability and Issues
+
+## Homebridge cloud service monitoring ( homebridge.ca )
+
+* Real time monitoring of the homebridge.ca cloud service is provided by [Uptime Robot](https://stats.uptimerobot.com/2WmEDHyV6).
+
+* Operational event reporting and alerting is sent to the [#hap-alexa](https://homebridgeteam.slack.com/messages/hap-alexa/) channel in the Homebridge slack instance, and the uptime robot reports events there in real time.
+
+## Raising Issues and Troubleshooting
+
+### Known Issues
 
 * I have started recording troubleshooting tips here based on issues seen by the community [Troubleshooting](Troubleshooting.MD).
-
-* I have created a slack channel at (https://homebridgeteam.slack.com/messages/hap-alexa/) to troubleshoot issues not on the troubleshooting page.  If you reach out there, I'm usually available.  If you don't have a slack account and need an invite, one is available via the Homebridge README / Community (https://github.com/nfarina/homebridge#community)
-
-* If you need to log an issue, please include a DEBUG log with your issue.
-
-```
-DEBUG=alexa* homebridge -I
-```
-
-## Known Issues
-
 * All homebridge PIN's in your setup need to be set to the same value.
 * Whitelisting/blacklisting of accessories is not supported, but this can be achieved at the plugin level by putting the plugins you don't want exposed to Alexa in their own instance of HomeBridge, and for that instance of Alexa, don't include -I command line option.  Discovery will fail for that instance, and the accessories will not be exposed.
 * An Alexa device or a software based Alexa is required. Using just the App or Website does not work, and device discovery will fail to find devices. The Reverb app is a software based Alexa that is known to work.
-* Thermostats - Partial support only ( Set target Temperature in celsius )
+
+### Slack Channel
+
+I have created a slack channel at (https://homebridgeteam.slack.com/messages/hap-alexa/) to troubleshoot issues not on the troubleshooting page.  If you reach out there, I'm usually available.  If you don't have a slack account and need an invite, one is available via the Homebridge README / Community (https://github.com/nfarina/homebridge#community)
+
+### Debug logs
+
+To collect a debug log, please start homebridge with this command line
+
+```
+DEBUG=* homebridge -I
+```
+
+### Homebridge Accessory Dump
+
+Sometimes during troubleshooting I need a dump of your homebridge accessories. Please use this command to collect it.  If needed you can change the ip address, port or pin to match your environment.
+
+```
+curl -X PUT http://127.0.0.1:51826/accessories --header "Content-Type:Application/json" --header "authorization: 031-45-154"
+```
 
 # Previous version of homebridge-alexa ( Version 1 )
 
@@ -485,3 +653,6 @@ See [Roadmap](Roadmap.md)
 * Tait Brown - HomeSkill Icon
 * ozno - Recommendation for the bonjour MDNS implementation, and testing on RPI 0 W
 * fazerize - Initial support for Thermostats
+* francescob - Validate TV Integration for homebridge-panasonic-viera-tv@4.1.0, homebridge-bravia@1.1.0 and homebridge-sky-q-experimental@1.0.2
+* jelvs - Validate TV Integration for homebridge-samsung-tizen
+* krocko - bose soundlink preset / channel change
