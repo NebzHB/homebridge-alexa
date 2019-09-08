@@ -14,6 +14,9 @@
       * [Intermittent connectivity from Alexa to Homebridge](#intermittent-connectivity-from-alexa-to-homebridge)
    * [Device Discovery](#device-discovery)
       * [Device discovery fails and the plugin logs show no issues.](#device-discovery-fails-and-the-plugin-logs-show-no-issues)
+      * [Device discovery fails, and this message is in the logs ERROR: Empty accessory name, parsing failed.](#device-discovery-fails-and-this-message-is-in-the-logs-error-empty-accessory-name-parsing-failed)
+      * [Device discovery fails, and this message is in the logs ERROR: Maximum devices/accessories of 300 exceeded.](#device-discovery-fails-and-this-message-is-in-the-logs-error-maximum-devicesaccessories-of-300-exceeded)
+      * [Device discovery fails, and this message is in the logs ERROR: Parsing failed, duplicate endpointID.](#device-discovery-fails-and-this-message-is-in-the-logs-error-parsing-failed-duplicate-endpointid)
    * [Controlling devices](#controlling-devices)
       * [[Alexa] PowerController TurnOff 192.168.1.226 51826 undefined Error: Homebridge auth failed, invalid PIN](#alexa-powercontroller-turnoff-1921681226-51826-undefined-error-homebridge-auth-failed-invalid-pin)
    * [Event error messages](#event-error-messages)
@@ -133,6 +136,19 @@ In the plugin debug logs, when a discovery request is received by the plugin it 
 alexaLocal Emitting alexa.discovery
 [2018-3-12 19:10:33] [Alexa] alexaDiscovery - returned 36 devices
 ```
+
+## Device discovery fails, and this message is in the logs `ERROR: Empty accessory name, parsing failed.`
+
+Alexa requires each accessory to have a name, please update your plugin config so that every accessory has a name.
+
+## Device discovery fails, and this message is in the logs `ERROR: Maximum devices/accessories of 300 exceeded.`
+
+Amazon only supports a maximum of 300 devices per skill.  Please see further details here https://developer.amazon.com/docs/device-apis/alexa-discovery.html#response
+
+
+## Device discovery fails, and this message is in the logs `ERROR: Parsing failed, duplicate endpointID.`
+
+The likely cause of this error is a duplicate accessory name.  Please adjust your devices names in your plugins config.json.
 
 # Controlling devices
 

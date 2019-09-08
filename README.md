@@ -121,7 +121,7 @@ This only supports accessories connected via a homebridge plugin, any 'Homekit' 
 ### Supported as Other Types
 
 * Door/Garage Door - Supported as a on/off device and also supported as a contact sensor for routines
-* Fans - Supported as Other
+* Fans and Air Purifiers - Supported as a Switch
 * Window Coverings / Blinds - Supported as Other
 * Valves, Sprinklers and Shower Heads - Supported as a light bulb
 * Occupancy Sensors - Supported as a Contact Sensor
@@ -610,6 +610,7 @@ Please note, as part of the verbose output from discovery devices, all your devi
 * All homebridge PIN's in your setup need to be set to the same value.
 * Whitelisting/blacklisting of accessories is not supported, but this can be achieved at the plugin level by putting the plugins you don't want exposed to Alexa in their own instance of HomeBridge, and for that instance of Alexa, don't include -I command line option.  Discovery will fail for that instance, and the accessories will not be exposed.
 * An Alexa device or a software based Alexa is required. Using just the App or Website does not work, and device discovery will fail to find devices. The Reverb app is a software based Alexa that is known to work.
+* The maximum number of supported devices is 300.  This is a limitation from the from the Amazon side, and not the plugin.
 
 ### Slack Channel
 
