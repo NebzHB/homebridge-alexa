@@ -65,6 +65,7 @@ You will need to manually remove all existing devices after upgrading and setup 
    * [Service Availability and Issues](#service-availability-and-issues)
       * [Homebridge cloud service monitoring ( homebridge.ca )](#homebridge-cloud-service-monitoring--homebridgeca-)
       * [Raising Issues and Troubleshooting](#raising-issues-and-troubleshooting)
+         * [Troubleshooting](#troubleshooting)
          * [Known Issues](#known-issues)
          * [Slack Channel](#slack-channel)
          * [Debug logs](#debug-logs)
@@ -121,7 +122,7 @@ This only supports accessories connected via a homebridge plugin, any 'Homekit' 
 ### Supported as Other Types
 
 * Door/Garage Door - Supported as a on/off device and also supported as a contact sensor for routines
-* Fans and Air Purifiers - Supported as a Switch
+* Fans, Humidifier Dehumidifier and Air Purifiers - Supported as a Switch
 * Window Coverings / Blinds - Supported as Other
 * Valves, Sprinklers and Shower Heads - Supported as a light bulb
 * Occupancy Sensors - Supported as a Contact Sensor
@@ -292,14 +293,17 @@ HOMEBRIDGE_OPTS=-I
 
 ```
 pm2 delete homebridge
+pm2 cleardump
 pm2 start homebridge -- -I
 pm2 save
 ```
-To review your settings, to ensure that they are working correctly.
+To review your settings, use command below to check if homebridge was sucessfully registered to pm2. After that, you can try to reboot your system and check whether you can control homebridge devices with Alexa app.
+
 
 ```
 pm2 show homebridge
 ```
+
 
 * If you have multiple homebridge options, the -I should be listed first. ie
 
@@ -373,7 +377,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-* routines - Enables passing to Alexa events from Motion and Contact sensors. For use in the Alexa app to create Routines triggered by these sensors.
+* routines - Enables passing to Alexa of real time events from Motion and Contact sensors. For use in the Alexa app to create Routines triggered by these sensors.  Not required unless you are using Alexa Routines.
 
 **For users who enrolled prior to March 22, 2019, you MUST Disable the skill and Enable the skill in the Alexa app as part of setup. If you miss this step, you will see this error `Event Gateway Response Code: 400` in the logs.**
 
@@ -604,6 +608,14 @@ Please note, as part of the verbose output from discovery devices, all your devi
 
 ## Raising Issues and Troubleshooting
 
+### Troubleshooting ###
+
+<img align="right" src="docs/AccountStatus.png" height="200">
+
+To assist in troubleshooting setup issues with your account, the hombridge.ca website displays the status of your account.
+
+From here you should be able to determine if your plugin is communicating with the service and if your Amazon Alexa account has enabled the Homebridge-Alexa skill.
+
 ### Known Issues
 
 * I have started recording troubleshooting tips here based on issues seen by the community [Troubleshooting](Troubleshooting.MD).
@@ -611,6 +623,7 @@ Please note, as part of the verbose output from discovery devices, all your devi
 * Whitelisting/blacklisting of accessories is not supported, but this can be achieved at the plugin level by putting the plugins you don't want exposed to Alexa in their own instance of HomeBridge, and for that instance of Alexa, don't include -I command line option.  Discovery will fail for that instance, and the accessories will not be exposed.
 * An Alexa device or a software based Alexa is required. Using just the App or Website does not work, and device discovery will fail to find devices. The Reverb app is a software based Alexa that is known to work.
 * The maximum number of supported devices is 300.  This is a limitation from the from the Amazon side, and not the plugin.
+* If your Amazon account is not domiciled in the country where your Alexa is located the skill will not work.  This is a limitation on the Amazon side and not with the plugin.  ie if you are in the UK and use an Amazon.com account, the skill will not work.  You need to use an Amazon account domiciled in the UK
 
 ### Slack Channel
 

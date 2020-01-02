@@ -2,7 +2,10 @@
 
 <!--ts-->
    * [Initial setup](#initial-setup)
-      * [ERROR: ( homebridge-alexa) You have an issue with your installation, please review the README](#error--homebridge-alexa-you-have-an-issue-with-your-installation-please-review-the-readme)
+      * [ERROR: ( homebridge-alexa) You have an issue with your installation, please review the README.](#error--homebridge-alexa-you-have-an-issue-with-your-installation-please-review-the-readme)
+         * [- Multiple copies of homebridge-alexa on your network](#--multiple-copies-of-homebridge-alexa-on-your-network)
+         * [- Bad login or password in your config.json for <a href="https://www.homebridge.ca" rel="nofollow">https://www.homebridge.ca</a>](#--bad-login-or-password-in-your-configjson-for-httpswwwhomebridgeca)
+         * [- VPN Software interfering with homebridge-alexa to Alexa communications](#--vpn-software-interfering-with-homebridge-alexa-to-alexa-communications)
       * [alexaLocal error { Error: Connection refused: Not authorized](#alexalocal-error--error-connection-refused-not-authorized)
       * [ERROR: ( homebridge-alexa) Stopping Home Skill connection due to excessive reconnects, please review the README.](#error--homebridge-alexa-stopping-home-skill-connection-due-to-excessive-reconnects-please-review-the-readme)
       * [alexaHAP HAP Discover failed ... is not running in insecure mode](#alexahap-hap-discover-failed--is-not-running-in-insecure-mode)
@@ -11,7 +14,6 @@
       * [[Alexa] ERROR: HAP Discovery failed, please review config](#alexa-error-hap-discovery-failed-please-review-config)
       * [After restarting homebridge Alexa can't find devices and needs to discover them again.  Or you have duplicate devices in Alexa](#after-restarting-homebridge-alexa-cant-find-devices-and-needs-to-discover-them-again--or-you-have-duplicate-devices-in-alexa)
       * [alexaLocal error { Error: connect ECONNREFUSED 35.169.132.61:8883](#alexalocal-error--error-connect-econnrefused-35169132618883)
-      * [Intermittent connectivity from Alexa to Homebridge](#intermittent-connectivity-from-alexa-to-homebridge)
    * [Device Discovery](#device-discovery)
       * [Device discovery fails and the plugin logs show no issues.](#device-discovery-fails-and-the-plugin-logs-show-no-issues)
       * [Device discovery fails, and this message is in the logs ERROR: Empty accessory name, parsing failed.](#device-discovery-fails-and-this-message-is-in-the-logs-error-empty-accessory-name-parsing-failed)
@@ -32,15 +34,15 @@
 
 # Initial setup
 
-## ERROR: ( homebridge-alexa) You have an issue with your installation, please review the README
+## ERROR: ( homebridge-alexa) You have an issue with your installation, please review the README.
 
 Likely cause of this message is having multiple copies of homebridge-alexa in your environment or bad login/password in the config.json.  Please note your only need one installation of homebridge-alexa per home or network.
 
 Known possible causes:
 
-1 - Multiple copies of homebridge-alexa on your network
-2 - Bad login or password in your config.json for https://www.homebridge.ca
-3 - VPN Software interfering with homebridge-alexa to Alexa communications
+### - Multiple copies of homebridge-alexa on your network
+### - Bad login or password in your config.json for https://www.homebridge.ca
+### - VPN Software interfering with homebridge-alexa to Alexa communications
 
 Please note, this message appears every 5 times the skill needs to reconnect to the skill cloud backend, so the message may occasionally appear.
 
@@ -50,9 +52,7 @@ Not authorized, the username and/or password configured in the plugin is incorre
 
 ## ERROR: ( homebridge-alexa) Stopping Home Skill connection due to excessive reconnects, please review the README.
 
-The homebridge-alexa plugin is having issues maintaining a connection to homebridge.cloudwatch.net, most likely cause of this message is having multiple copies of homebridge-alexa in your environment.  The plugin has stopped responding to Alexa commands until the issue is resolved.
 
-Please note, this message appears after the skill needs to reconnect to the skill cloud backend over 1,000 times.  As this point the plugin has stopped trying to connect to the skill cloud backend.  Restarting homebridge will reset the counter.
 
 ## alexaHAP HAP Discover failed ... is not running in insecure mode
 
@@ -112,15 +112,6 @@ alexaLocal offline +8ms
 ```
 
 This is for a future feature enhancement, and can be ignored.
-
-## Intermittent connectivity from Alexa to Homebridge
-
-Alexa works intermittently, and the logs have offline/reconnect messages.  Also in your environment your running VPN software on the same machine as homebridge.  The VPN software is interfering with the MQTT connection between homebridge-alexa and https://www.homebridge.ca.  Please move the VPN to a different machine.
-
-```
-alexaLocal offline +35s
-alexaLocal reconnect +5s
-```
 
 # Device Discovery
 
