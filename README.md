@@ -17,7 +17,7 @@ Country availability - The plugin is available in these countries, English (AU),
 * Supports the following HomeKit accessory types Lightbulb, Outlet, Fan, Fan2, Temperature Sensor, Window Coverings and Switch.
 * Supports passing of sensor updates in real time to Alexa for use in routines.
 * Includes support for brightness and colour.
-* Creates a Contact Sensor that monitors the status of the connect to the Homebridge Alexa Cloud Servers.
+* This plugin does not have any devices or accessories that are visible from Homekit, and does not need to be added on the Home app.
 * The plugin does not need to be installed in your 'main' homebridge instance.  It can be installed in any 'Homebridge' instance in your setup.
 * Enables control from non-hardware based alexa devices like Invoxia Triby, and AlexaPI.
 
@@ -44,7 +44,6 @@ Country availability - The plugin is available in these countries, English (AU),
       * [AppleTV](#appletv)
       * [HomeKit TV (iOS 12.2)](#homekit-tv-ios-122)
          * [HomeKit TV - Tested plugins](#homekit-tv---tested-plugins)
-         * [TV Inputs and Channels](#tv-inputs-and-channels)
       * [Speakers](#speakers)
          * [Bose SoundLink - Change preset](#bose-soundlink---change-preset)
       * [Yamaha Receiver/Spotify control](#yamaha-receiverspotify-control)
@@ -56,18 +55,6 @@ Country availability - The plugin is available in these countries, English (AU),
       * [HomeBridge-alexa plugin configuration](#homebridge-alexa-plugin-configuration)
          * [Required parameters](#required-parameters)
          * [Optional parameters](#optional-parameters)
-            * [pin](#pin)
-            * [routines](#routines)
-            * [debug](#debug)
-            * [refresh](#refresh)
-            * [filter](#filter)
-            * [combine](#combine)
-            * [speakers](#speakers-1)
-            * [Channels](#channels)
-            * [Inputs](#inputs)
-            * [Apple TV](#apple-tv)
-            * [Yamaha Spotify Controls](#yamaha-spotify-controls)
-            * [New Parser](#new-parser)
       * [Initial Testing and confirming configuration](#initial-testing-and-confirming-configuration)
       * [Enable Homebridge smarthome skill and link accounts](#enable-homebridge-smarthome-skill-and-link-accounts)
       * [Discover Devices](#discover-devices)
@@ -76,7 +63,7 @@ Country availability - The plugin is available in these countries, English (AU),
       * [Raising Issues and Troubleshooting](#raising-issues-and-troubleshooting)
          * [Troubleshooting](#troubleshooting)
          * [Known Issues](#known-issues)
-         * [Discord Channel](#discord-channel)
+         * [Slack Channel](#slack-channel)
          * [Debug logs](#debug-logs)
          * [Homebridge Accessory Dump](#homebridge-accessory-dump)
    * [Roadmap](#roadmap)
@@ -180,8 +167,6 @@ cool, cool white
 * Alexa, turn on *device* ( Open's a garage door )
 * Alexa, turn off *device* ( Close's a garage door )
 
-See [example](https://github.com/NorthernMan54/homebridge-alexa/wiki/Garage-Door) using a routine to fix the wording
-
 ## Window coverings / blinds
 
 * Alexa, turn on *device* ( Open's blinds )
@@ -249,11 +234,6 @@ These are the remote buttons
 
 * Yamaha AVR - homebridge-yamaha-zone-tv
   - Alexa can turn on and off and control volume. Also control Spotify/Airplay playback
-
-### TV Inputs and Channels
-
-* Alexa, change to the channel to # on *device*
-* Alexa, change the input to *input* on the *device*
 
 ## Speakers
 
@@ -377,8 +357,7 @@ sudo npm install -g homebridge-alexa
 
 ### Optional parameters
 
-#### pin
-  - If you had changed your homebridge pin from the default of "pin": "031-45-154" ie
+* pin - If you had changed your homebridge pin from the default of "pin": "031-45-154" ie
 
 ```
 "platforms": [
@@ -392,8 +371,9 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### routines
-  - Enables passing to Alexa of real time events from Motion and Contact sensors. For use in the Alexa app to create Routines triggered by these sensors.  Not required unless you are using Alexa Routines.
+* routines - Enables passing to Alexa of real time events from Motion and Contact sensors. For use in the Alexa app to create Routines triggered by these sensors.  Not required unless you are using Alexa Routines.
+
+**For users who enrolled prior to March 22, 2019, you MUST Disable the skill and Enable the skill in the Alexa app as part of setup. If you miss this step, you will see this error `Event Gateway Response Code: 400` in the logs.**
 
 ```
 "platforms": [
@@ -407,8 +387,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### debug
-  - This enables debug logging mode, can be used instead of the command line option ( DEBUG=* homebridge )
+* debug - This enables debug logging mode, can be used instead of the command line option ( DEBUG=* homebridge )
 
 ```
 "platforms": [
@@ -422,8 +401,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### refresh
-  - Frequency of refreshes of the homebridge accessory cache, in seconds.  Defaults to 15 minutes.
+* refresh - Frequency of refreshes of the homebridge accessory cache, in seconds.  Defaults to 15 minutes.
 
 ```
 "platforms": [
@@ -437,8 +415,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### filter
-  - Limits accessories shared with Alexa to a single homebridge instance.  ( I'm using this setting with Amazon for skill testing. ).  The setting is ip:port of homebridge instance.
+* filter - Limits accessories shared with Alexa to a single homebridge instance.  ( I'm using this setting with Amazon for skill testing. ).  The setting is ip:port of homebridge instance.
 
 ```
 "platforms": [
@@ -452,8 +429,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### combine
-  - Combine disparate accessories into one common device.  My example here is combining my TV Remote (KODI), which only has ON/OFF and Volume controls into the Apple TV (TV) playback controls. And combining the spotify controls from my Yamaha receiver into the Zone.
+* combine - Combine disparate accessories into one common device.  My example here is combining my TV Remote (KODI), which only has ON/OFF and Volume controls into the Apple TV (TV) playback controls. And combining the spotify controls from my Yamaha receiver into the Zone.
 
 ```
 "platforms": [
@@ -476,8 +452,7 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-#### speakers
-  - Devices to configure as speakers as HomeKit currently does not have a Speaker service, and enable the alexa phase `Alexa, raise the volume on`.
+* speakers - Devices to configure as speakers as HomeKit currently does not have a Speaker service
 
 ```
 "platforms": [
@@ -494,8 +469,8 @@ sudo npm install -g homebridge-alexa
 ],
 ```
 
-* manufacturer - Is the manufacturer of the accessory as shown in the Home App
-* name - Is the name of the accessory as shown in the Home App
+** Manufacturer - Is the manufacturer of the accessory as shown in the Home App
+** Name - Is the name of the accessory as shown in the Home App
 
 ie
 ```
@@ -520,98 +495,9 @@ ie
   }
 ```
 
-#### Channels
+* Apple TV
 
-  - This enables Alexa to be able to change channels on your TV by number, and enables the phrase `Alexa, change to the channel to`.
-
-```
-"channel": [{
-  "into": "TV",
-  "manufacturer": "HTTP-IRBlaster",
-  "name": "Tuner"}],
-```
-
-* into - Name of the existing accessory to add the input function to.  In my setup this is my Apple TV accessory.
-
-* manufacturer - Is the manufacturer of the accessory as shown in the Home App
-
-* name - Is the name of the accessory as shown in the Home App
-
-The accessory to receive channel change commands will receive the channel number as the value.
-
-#### Inputs
-
-  - This combines several buttons that control inputs on a TV or Stereo into an Alexa input control and enables the phrase `Alexa, change to input to`. For the names of the inputs, Amazon provided a list ( see alexa name below ) that you can choose from.  You can map multiple alexa names to the same button as well.
-
-`Alexa, change the input to Tuner on the TV`
-
-`Alexa, change the input to HDMI 1 on the TV`
-
-```
-{
-    "platform": "Alexa",
-    "username": "...",
-    "password": "...",
-    "name": "Alexa",
-    "inputs": [{
-      "into": "TV",
-      "devices": [{
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "Tuner",
-        "alexaName": "TUNER"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "Tuner",
-        "alexaName": "TV TUNER"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "Tuner",
-        "alexaName": "TV"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "HDMI1",
-        "alexaName": "HDMI 1"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "HDMI1",
-        "alexaName": "TV KODI"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "HDMI1",
-        "alexaName": "MEDIA PLAYER"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "HDMI2",
-        "alexaName": "HDMI 2"
-      }, {
-        "manufacturer": "HTTP-IRBlaster",
-        "name": "HDMI2",
-        "alexaName": "TV NETFLIX"
-      }]
-    }],
-```
-
-In my setup I use an OTA Antenna, hence the Tuner option and have a KODI box on HDMI 1, and a Apple TV we use for Netflix on HDMI 2.  For the alexaName's "TV KODI", "TV TUNER", and "TV NETFLIX" these were not part of the Amazon documentation and may stop working at any time or may not work in your region.
-
-* into - Name of the existing accessory to add the input function to.  In my setup this is my Apple TV accessory.
-
-* manufacturer - Is the manufacturer of the accessory as shown in the Home App
-
-* name - Is the name of the accessory as shown in the Home App
-
-* alexaName - This the input your are asking Alexa to change to.
-
-```
-AUX 1, AUX 2, AUX 3, AUX 4, AUX 5, AUX 6, AUX 7, BLURAY, CABLE, CD, COAX 1, COAX 2, COMPOSITE 1, DVD, GAME,
-HD RADIO, HDMI 1, HDMI 2, HDMI 3, HDMI 4, HDMI 5, HDMI 6, HDMI 7, HDMI 8, HDMI 9, HDMI 10, HDMI ARC, INPUT 1,
-INPUT 2, INPUT 3, INPUT 4, INPUT 5, INPUT 6, INPUT 7, INPUT 8, INPUT 9, INPUT 10, IPOD, LINE 1, LINE 2, LINE 3,
-LINE 4, LINE 5, LINE 6, LINE 7, MEDIA PLAYER, OPTICAL 1, OPTICAL 2, PHONO, PLAYSTATION, PLAYSTATION 3,
-PLAYSTATION 4, SATELLITE, SMARTCAST, TUNER, TV, USB DAC, VIDEO 1, VIDEO 2, VIDEO 3, XBOX
-```
-
-#### Apple TV
-
-  - This is the config from my Apple TV after completing the pairing.  Please note, *"showDefaultSwitches": true* and   *"defaultSwitchesIncludeATVName": true*, are required parameters.  Please note I blanked out the devices/credentials section with my ATV credentials.
+This is the config from my Apple TV after completing the pairing.  Please note, *"showDefaultSwitches": true* and   *"defaultSwitchesIncludeATVName": true*, are required parameters.  Please note I blanked out the devices/credentials section with my ATV credentials.
 
 ```
 {
@@ -629,11 +515,11 @@ PLAYSTATION 4, SATELLITE, SMARTCAST, TUNER, TV, USB DAC, VIDEO 1, VIDEO 2, VIDEO
 }
 ```
 
-#### Yamaha Spotify Controls
+* Yamaha Spotify Controls
 
 This uses the plugin homebridge-yamaha-home and a Yamaha Receiver which includes Spotify and Spotify Playback Controls.
 
-#### New Parser
+* New Parser
 
 As of April 14, 2019 I changed the Homebridge device parser massively, to add support for Locks and Heater/Cooler devices.  To go back to the old device parser, you can set an option oldParser to true.  Default is to the new parser.
 
@@ -710,11 +596,9 @@ Please note, as part of the verbose output from discovery devices, all your devi
 
 ## Homebridge cloud service monitoring ( homebridge.ca )
 
-* Contact Sensor **Alexa** monitors the connection to the cloud service.  When the contact sensor is **Closed**, the connection has been **successfully** made to the cloud service, and when the contact sensor is **Open** the connection to the cloud service has **not** been made. To determine why the connection to the cloud service is not working, please check your homebridge log files. During **normal** operation the Contact Sensor should be **Closed**.
-
 * Real time monitoring of the homebridge.ca cloud service is provided by [Uptime Robot](https://stats.uptimerobot.com/2WmEDHyV6).
 
-* Cloud service operational event reporting and alerting is sent to the #homebridge-alexa channel in the Homebridge Discord instance, and the uptime robot reports events there in real time.
+* Operational event reporting and alerting is sent to the [#hap-alexa](https://homebridgeteam.slack.com/messages/hap-alexa/) channel in the Homebridge slack instance, and the uptime robot reports events there in real time.
 
 ## Raising Issues and Troubleshooting
 
@@ -735,9 +619,9 @@ From here you should be able to determine if your plugin is communicating with t
 * The maximum number of supported devices is 300.  This is a limitation from the from the Amazon side, and not the plugin.
 * If your Amazon account is not domiciled in the country where your Alexa is located the skill will not work.  This is a limitation on the Amazon side and not with the plugin.  ie if you are in the UK and use an Amazon.com account, the skill will not work.  You need to use an Amazon account domiciled in the UK
 
-### Discord Channel
+### Slack Channel
 
-I have created a Discord channel on the homebridge discord server to troubleshoot issues not on the troubleshooting page.  If you reach out there, I'm usually available.  The channel is called #homebridge-alexa
+I have created a slack channel at (https://homebridgeteam.slack.com/messages/hap-alexa/) to troubleshoot issues not on the troubleshooting page.  If you reach out there, I'm usually available.  If you don't have a slack account and need an invite, one is available via the Homebridge README / Community (https://github.com/nfarina/homebridge#community)
 
 ### Debug logs
 
